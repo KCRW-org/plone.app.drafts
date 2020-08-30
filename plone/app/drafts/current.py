@@ -106,7 +106,7 @@ class DefaultCurrentDraftManagement(object):
         if self.targetKey is None:
             return False
 
-        path = self.path or self.defaultPath
+        path = self.cookie_path
         if TARGET_KEY not in self.request.response.cookies:
             self.request.response.setCookie(
                 TARGET_KEY,
@@ -136,7 +136,7 @@ class DefaultCurrentDraftManagement(object):
         return True
 
     def discard(self):
-        path = self.path or self.defaultPath
+        path = self.cookie_path
         self.request.response.expireCookie(USERID_KEY, path=path)
         self.request.response.expireCookie(TARGET_KEY, path=path)
         self.request.response.expireCookie(DRAFT_NAME_KEY, path=path)
@@ -154,3 +154,10 @@ class DefaultCurrentDraftManagement(object):
             return path[:-1]
         else:
             return path
+
+    @property
+    def cookie_path(self):
+        # Get the context minus the view
+        if self.path:
+            return '/' + '/'.join(self.request.physicalPathToVirtualPath(self.path)).lstrip('/')
+        return self.defaultPath

@@ -80,9 +80,12 @@ class DraftProxy(object):
         if name in deleted:
             raise AttributeError(name)
 
-        if getattr(self.__draft, name, None):
-            return getattr(self.__draft, name)
-
+        draft = self.__draft
+        if getattr(draft, name, None):
+            return getattr(draft, name)
+        if getattr(draft, '_draftAddFormTarget', None):
+            target = draft._draftAddFormTarget.__of__(self.__target)
+            return getattr(target, name)
         return getattr(self.__target, name)
 
     def __setattr__(self, name, value):
