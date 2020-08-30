@@ -76,10 +76,9 @@ class DefaultAddFormFieldWidgets(FieldWidgetsBase):
             current = ICurrentDraftManagement(request)
 
             if current.targetKey != '++add++{0}'.format(form.portal_type):
-                beginDrafting(context, None)
                 current.path = '/'.join(context.getPhysicalPath())
                 current.targetKey = '++add++{0}'.format(form.portal_type)
-                current.save()
+                beginDrafting(context, None)
             else:
                 current.mark()
 
