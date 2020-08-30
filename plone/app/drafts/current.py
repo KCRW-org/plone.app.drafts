@@ -136,11 +136,11 @@ class DefaultCurrentDraftManagement(object):
         return True
 
     def discard(self):
-        path = self.cookie_path
-        self.request.response.expireCookie(USERID_KEY, path=path)
-        self.request.response.expireCookie(TARGET_KEY, path=path)
-        self.request.response.expireCookie(DRAFT_NAME_KEY, path=path)
-        self.request.response.expireCookie(PATH_KEY, path=path)
+        for path in (self.cookie_path, self.defaultPath):
+            self.request.response.expireCookie(USERID_KEY, path=path)
+            self.request.response.expireCookie(TARGET_KEY, path=path)
+            self.request.response.expireCookie(DRAFT_NAME_KEY, path=path)
+            self.request.response.expireCookie(PATH_KEY, path=path)
 
     @property
     def defaultPath(self):
