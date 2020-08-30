@@ -30,6 +30,7 @@ from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.lifecycleevent import IObjectAddedEvent
+from zope.schema._bootstrapinterfaces import RequiredMissing
 
 import transaction
 
@@ -214,7 +215,11 @@ def autosave(event):  # noqa
         return
 
     data, errors = form.extractData()
-    if not errors:
+
+    # Save draft even when not all required fields are filled
+    value_errors = [e for e in errors
+                    if not isinstance(getattr(e, 'context', None), RequiredMissing)]
+    if not value_errors:
         content = DraftProxy(draft, target)
 
         # Drop known non-draftable values
