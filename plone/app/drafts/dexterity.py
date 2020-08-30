@@ -77,7 +77,7 @@ class DefaultAddFormFieldWidgets(FieldWidgetsBase):
 
             if current.targetKey != '++add++{0}'.format(form.portal_type):
                 beginDrafting(context, None)
-                current.path = '/'.join(context.getPhysicalPath())
+                current.path = '/' + context.virtual_url_path().rstrip('/')
                 current.targetKey = '++add++{0}'.format(form.portal_type)
                 current.save()
             else:
@@ -122,7 +122,7 @@ class DefaultEditFormFieldWidgets(FieldWidgetsBase):
 
             if current.targetKey is None:
                 beginDrafting(context, None)
-                current.path = '/'.join(context.getPhysicalPath())
+                current.path = '/' + context.virtual_url_path().rstrip('/')
                 current.targetKey = IUUID(context)
                 current.save()
             else:
